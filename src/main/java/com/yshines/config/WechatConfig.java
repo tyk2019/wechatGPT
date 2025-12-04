@@ -12,7 +12,10 @@ import org.springframework.stereotype.Component;
  */
 @Data
 @Component
-@ConfigurationProperties("wechat")
+@ConfigurationProperties(prefix = "wechat")
 public class WechatConfig {
-    private String qrPath;
+    private String qrPath = "./"; // 默认二维码保存路径
+    
+    // 默认会话重置命令
+    private String resetCommand = "重置会话";
 }

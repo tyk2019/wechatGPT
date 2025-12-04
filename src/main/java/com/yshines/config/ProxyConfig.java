@@ -12,8 +12,15 @@ import org.springframework.stereotype.Component;
  */
 @Data
 @Component
-@ConfigurationProperties("proxy")
+@ConfigurationProperties(prefix = "proxy")
 public class ProxyConfig {
     private String host;
     private String port;
+    
+    /**
+     * 检查是否配置了代理
+     */
+    public boolean isProxyConfigured() {
+        return host != null && !host.trim().isEmpty() && port != null && !port.trim().isEmpty();
+    }
 }
