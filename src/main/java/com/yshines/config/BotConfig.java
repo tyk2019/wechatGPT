@@ -44,22 +44,21 @@ public class BotConfig {
     @PostConstruct
     public void init() {
         //配置代理
-        if (null != proxyConfig.getHost() && !"".equals(proxyConfig.getHost())) {
+        if (proxyConfig.isProxyConfigured()) {
             System.setProperty("http.proxyHost", proxyConfig.getHost());
             System.setProperty("https.proxyHost", proxyConfig.getHost());
-        }
-        if (null != proxyConfig.getPort() && !"".equals(proxyConfig.getPort())) {
             System.setProperty("http.proxyPort", proxyConfig.getPort());
             System.setProperty("https.proxyPort", proxyConfig.getPort());
+            log.info("已配置代理: {}:{}", proxyConfig.getHost(), proxyConfig.getPort());
         }
 
         //ChatGPT
-        model = "gpt-3.5-turbo";
-//        model = "gpt-3.5-turbo-0301" 这是快照版本
-        maxToken = 2048;
-        temperature = 0.8;
+        model = chatgptConfig.getModel();
+        maxToken = chatgptConfig.getMaxToken();
+        temperature = chatgptConfig.getTemperature();
 //        你可以通过设定basicPrompt来指定人格
 //        basicPrompt = new ChatMessage("system", "接下来在我向你陈述一件事情时，你只需要回答：“典”");
+
         openAiServiceList = new ArrayList<>();
         for (String apiKey : chatgptConfig.getApiKey()) {
             apiKey = apiKey.trim();

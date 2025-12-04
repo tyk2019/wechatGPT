@@ -22,8 +22,9 @@ public class WechatMessageHandler implements IMsgHandlerFace {
 
     @Resource
     private InteractService interactService;
-
-    private static final String RESET_WORD = "重置会话";
+    
+    @Resource
+    private WechatConfig wechatConfig;
 
     @Override
     public String textMsgHandle(BaseMsg baseMsg) {
@@ -34,7 +35,7 @@ public class WechatMessageHandler implements IMsgHandlerFace {
             if (baseMsg.getText().contains("@"+ Core.getInstance().getNickName())){
                 //去除@再提问
                 String prompt = baseMsg.getText().replace("@"+ Core.getInstance().getNickName() + " ", "").trim();
-                if (RESET_WORD.equals(prompt)){
+                if (wechatConfig.getResetCommand().equals(prompt)){
                     BotUtil.resetPrompt(baseMsg.getFromUserName());
                     return "重置会话成功";
                 }else {
@@ -51,7 +52,7 @@ public class WechatMessageHandler implements IMsgHandlerFace {
             }
         }else {
             //不是在群聊 则直接回复
-            if (RESET_WORD.equals(baseMsg.getText())){
+            if (wechatConfig.getResetCommand().equals(baseMsg.getText())){
                 BotUtil.resetPrompt(baseMsg.getFromUserName());
                 return "重置会话成功";
             }else {
